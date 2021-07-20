@@ -1,0 +1,12 @@
+version: '3.7'
+
+services:
+
+  app:
+    build:
+      context: ../
+      dockerfile: docker/Dockerfile
+    environment:
+      PROFILE: dev
+    ports:
+      - "8088:8088"

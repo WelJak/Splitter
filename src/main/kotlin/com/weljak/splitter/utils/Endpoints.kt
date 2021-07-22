@@ -6,4 +6,6 @@ object Endpoints {
     const val USER_REGISTER_ENDPOINT = "$USER_BASE_ENDPOINT/create"
     const val USER_LOGIN_ENDPOINT = "$USER_BASE_ENDPOINT/auth/login"
 
+    const val FRIENDS_ENDPOINT = "/friends"
+
 }

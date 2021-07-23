@@ -6,7 +6,6 @@ import com.weljak.splitter.domain.repository.user.UserRepository
 import com.weljak.splitter.service.friends.FriendshipService
 import com.weljak.splitter.utils.mapper.UserMapper
 import com.weljak.splitter.webapi.controller.user.UserCreationForm
-import mu.KotlinLogging
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Mono
 import java.util.*
@@ -24,7 +23,7 @@ class ReactiveUserService(
 
     override fun save(userCreationForm: UserCreationForm): Mono<User> {
         return Mono.just(userCreationForm)
-            .flatMap { userAccountValidator.validate(it) }
+            .flatMap { userAccountValidator.validateRegistrationForm(it) }
             .flatMap { friendshipService.save(Friendship(UUID.randomUUID().toString(), it.username)).thenReturn(it) }
             .flatMap { userRepository.save(userMapper.toUser(it)) }
             .map { it }

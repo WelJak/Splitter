@@ -10,4 +10,5 @@ interface MongoUserDocumentRepository: ReactiveMongoRepository<UserDocument, Str
     fun findByUsername(username: String): Mono<UserDocument>
     fun existsByUsername(username: String): Mono<Boolean>
     fun existsByEmail(email: String): Mono<Boolean>
+    fun existsByUsernameAndAndEmail(username: String, email: String): Mono<Boolean>
 }

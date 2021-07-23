@@ -29,6 +29,6 @@ class MongoFriendshipRequestRepository(
     }
 
     override fun deleteFriendshipRequest(friendshipRequest: FriendshipRequest): Mono<Void> {
-        return mongoFriendshipRequestDocumentRepository.delete(friendshipMapper.toFriendShipRequestDocument(friendshipRequest))
+        return mongoFriendshipRequestDocumentRepository.deleteById(friendshipRequest.id)
     }
 }

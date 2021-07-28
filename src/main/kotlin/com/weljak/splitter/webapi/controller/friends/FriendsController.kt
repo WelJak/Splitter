@@ -1,10 +1,7 @@
 package com.weljak.splitter.webapi.controller.friends
 
-import com.weljak.splitter.domain.model.friends.Friend
 import com.weljak.splitter.service.friends.FriendshipService
 import com.weljak.splitter.service.friends.request.FriendshipRequestService
-import com.weljak.splitter.service.user.UserAccountValidator
-import com.weljak.splitter.service.user.UserService
 import com.weljak.splitter.utils.Endpoints
 import com.weljak.splitter.utils.api.response.SplitterResponse
 import com.weljak.splitter.utils.api.response.SplitterResponseUtils
@@ -19,7 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RestController
 import reactor.core.publisher.Mono
-import java.lang.Exception
 
 @RestController
 class FriendsController(

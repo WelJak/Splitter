@@ -55,4 +55,22 @@ class FriendsController(
             .confirmFriendshipRequest(currentUser,reqId,confirmationId)
             .map { SplitterResponseUtils.success(serverHttpRequest, it, "Friend request accepted", HttpStatus.OK) }
     }
+
+    @GetMapping(Endpoints.SENT_FRIEND_REQUESTS_ENDPOINT)
+    fun getCurrentUserSentFriendRequests(
+        serverHttpRequest: ServerHttpRequest,
+        @AuthenticationPrincipal currentUser: String
+    ): Mono<ResponseEntity<SplitterResponse>> {
+        return friendshipRequestService.findAllFriendRequestsMadeByUser(currentUser)
+            .map { SplitterResponseUtils.success(serverHttpRequest, it, "Fetched friend requests sent by user", HttpStatus.OK) }
+    }
+
+    @GetMapping(Endpoints.RECEIVED_FRIEND_REQUESTS_ENDPOINT)
+    fun getCurrentUserReceivedFriendRequests(
+        serverHttpRequest: ServerHttpRequest,
+        @AuthenticationPrincipal currentUser: String
+    ): Mono<ResponseEntity<SplitterResponse>> {
+        return friendshipRequestService.findAllFriendRequestReceivedByUser(currentUser)
+            .map { SplitterResponseUtils.success(serverHttpRequest, it, "Fetched friend request received by user", HttpStatus.OK) }
+    }
 }

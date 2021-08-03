@@ -16,4 +16,5 @@ abstract class FriendshipMapper {
     abstract fun toFriendShipDocument(friendship: Friendship): FriendshipDocument
     abstract fun toFriendShipRequestDocument(friendshipRequest: FriendshipRequest): FriendshipRequestDocument
     abstract fun toFriendShipRequest(friendshipRequestDocument: FriendshipRequestDocument): FriendshipRequest
+    abstract fun toFriendShipRequests(friendshipRequestDocuments: List<FriendshipRequestDocument>): List<FriendshipRequest>
 }

@@ -9,4 +9,6 @@ interface FriendshipRequestService {
     fun createFriendshipRequest(username: String, friendshipRequestCreationForm: FriendshipRequestCreationForm): Mono<FriendshipRequest>
     fun confirmFriendshipRequest(currentUser: String,requestId: String, confirmationId: String): Mono<ConfirmationResponse>
     fun deleteFriendshipRequest(requestId: String): Mono<Void>
+    fun findAllFriendRequestsMadeByUser(username: String): Mono<List<FriendshipRequest>>
+    fun findAllFriendRequestReceivedByUser(username: String): Mono<List<FriendshipRequest>>
 }

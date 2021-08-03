@@ -57,4 +57,12 @@ class ReactiveFriendshipRequestService(
             .findById(requestId)
             .flatMap { friendshipRequestRepository.deleteFriendshipRequest(it) }
     }
+
+    override fun findAllFriendRequestsMadeByUser(username: String): Mono<List<FriendshipRequest>> {
+        return friendshipRequestRepository.findAllByUsername(username)
+    }
+
+    override fun findAllFriendRequestReceivedByUser(username: String): Mono<List<FriendshipRequest>> {
+        return friendshipRequestRepository.findAllByPotentialFriendUsername(username)
+    }
 }

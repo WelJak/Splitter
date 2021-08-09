@@ -1,7 +1,6 @@
 package com.weljak.splitter.domain.repository.friends.request
 
 import com.weljak.splitter.domain.model.friends.request.FriendshipRequest
-import com.weljak.splitter.domain.model.friends.request.FriendshipRequestDocument
 import com.weljak.splitter.utils.mapper.FriendshipMapper
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono

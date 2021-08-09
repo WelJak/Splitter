@@ -13,4 +13,12 @@ object Endpoints {
     const val CREATE_FRIENDS_REQUEST_ENDPOINT = "$FRIENDS_REQUEST_ENDPOINT/create"
     const val CONFIRM_FRIENDS_REQUEST_ENDPOINT = "$FRIENDS_REQUEST_ENDPOINT/confirm/{reqId}/{confirmationId}"
 
+    private const val EXPENSE_ENDPOINT = "/expense"
+    const val CREATE_EXPENSE_ENDPOINT = "$EXPENSE_ENDPOINT/create"
+    const val SETTLE_UP_EXPENSE_ENDPOINT = "$EXPENSE_ENDPOINT/settle/{id}"
+    const val DELETE_EXPENSE_ENDPOINT = "$EXPENSE_ENDPOINT/delete/{id}"
+    const val FIND_EXPENSES_ENDPOINT = "$EXPENSE_ENDPOINT/all"
+    const val FIND_EXPENSES_BY_GROUP_NAME_ENDPOINT = "$EXPENSE_ENDPOINT/{groupName}"
+    const val GET_CURRENT_USER_UNSETTLED_EXPENSES = "$FIND_EXPENSES_ENDPOINT/unsettled"
+
 }

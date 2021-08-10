@@ -63,7 +63,8 @@ class FriendsController(
         @AuthenticationPrincipal currentUser: String,
         @PathVariable reqId: String
     ): Mono<ResponseEntity<SplitterResponse>> {
-        return friendshipRequestService.deleteFriendshipRequest(reqId).flatMap { SplitterResponseUtils.noContent() }
+        return friendshipRequestService.deleteFriendshipRequest(reqId)
+            .map { SplitterResponseUtils.noContent(serverHttpRequest, "Friend request deleted") }
     }
 
     @GetMapping(Endpoints.SENT_FRIEND_REQUESTS_ENDPOINT)

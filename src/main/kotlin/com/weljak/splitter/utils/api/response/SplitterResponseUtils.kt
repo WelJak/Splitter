@@ -40,8 +40,10 @@ object SplitterResponseUtils {
         return ResponseEntity(response, httpStatus)
     }
 
-    fun noContent(): Mono<ResponseEntity<SplitterResponse>> {
-        return Mono.defer { Mono.just<ResponseEntity<SplitterResponse>>(ResponseEntity(HttpStatus.NO_CONTENT)) }
+    fun noContent(serverHttpRequest: ServerHttpRequest, message: String): ResponseEntity<SplitterResponse> {
+        val endpoint = serverHttpRequest.path.pathWithinApplication().value()
+        val response = successsplitterResponse(endpoint, null, message, HttpStatus.NO_CONTENT)
+        return ResponseEntity(response, HttpStatus.NO_CONTENT)
     }
 
     private fun successsplitterResponse(endpoint: String, payload: Any?, message: String, httpsStatus: HttpStatus): SplitterResponse {

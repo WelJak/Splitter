@@ -73,7 +73,7 @@ class ExpenseController(
     ): Mono<ResponseEntity<SplitterResponse>> {
         return expenseService.findById(id)
             .flatMap { expenseService.delete(it) }
-            .flatMap { SplitterResponseUtils.noContent() }
+            .map { SplitterResponseUtils.noContent(serverHttpRequest, "Expense deleted") }
     }
 
     @GetMapping(Endpoints.FIND_EXPENSES_ENDPOINT)

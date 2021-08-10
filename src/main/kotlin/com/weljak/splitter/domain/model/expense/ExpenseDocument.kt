@@ -6,6 +6,7 @@ import java.math.BigDecimal
 @Document("expenses")
 data class ExpenseDocument(
     val id: String,
+    val description: String,
     val createdBy: String,
     val paidBy: String,
     val amountPaidByPayer: BigDecimal,

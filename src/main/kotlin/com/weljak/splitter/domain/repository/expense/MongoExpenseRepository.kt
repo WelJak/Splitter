@@ -9,7 +9,6 @@ import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria.where
 import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update
-import org.springframework.data.mongodb.core.query.and
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono
 import java.math.BigDecimal
@@ -63,6 +62,4 @@ class MongoExpenseRepository(
         return mongoTemplate.find(query, ExpenseDocument::class.java)
             .map { expenseMapper.toExpense(it) }.collectList()
     }
-
-
 }

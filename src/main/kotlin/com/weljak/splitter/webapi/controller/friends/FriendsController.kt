@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.security.core.annotation.AuthenticationPrincipal
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -54,6 +55,15 @@ class FriendsController(
         return friendshipRequestService
             .confirmFriendshipRequest(currentUser,reqId,confirmationId)
             .map { SplitterResponseUtils.success(serverHttpRequest, it, "Friend request accepted", HttpStatus.OK) }
+    }
+
+    @DeleteMapping(Endpoints.CANCEL_FRIENDS_REQUEST_ENDPOINT)
+    fun declineFriendRequest(
+        serverHttpRequest: ServerHttpRequest,
+        @AuthenticationPrincipal currentUser: String,
+        @PathVariable reqId: String
+    ): Mono<ResponseEntity<SplitterResponse>> {
+        return friendshipRequestService.deleteFriendshipRequest(reqId).flatMap { SplitterResponseUtils.noContent() }
     }
 
     @GetMapping(Endpoints.SENT_FRIEND_REQUESTS_ENDPOINT)

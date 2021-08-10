@@ -5,6 +5,7 @@ import java.math.BigDecimal
 
 data class Expense(
     val id: String,
+    val description: String,
     val createdBy: String,
     val paidBy: String,
     val amountPaidByPayer: BigDecimal,

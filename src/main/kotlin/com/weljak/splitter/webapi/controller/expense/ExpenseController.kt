@@ -35,6 +35,15 @@ class ExpenseController(
             .map { ExpenseMapper.toExpense(it, currentUser) }
             .flatMap { expenseService.create(it) }
             .map { SplitterResponseUtils.success(serverHttpRequest, it, "Expense created", HttpStatus.CREATED) }
+            .onErrorResume {
+                Mono.just(
+                    SplitterResponseUtils.error(
+                        serverHttpRequest,
+                        null,
+                        "Error during creating expense: ${it.message.toString()}",
+                        HttpStatus.BAD_REQUEST)
+                )
+            }
     }
 
     @PutMapping(Endpoints.SETTLE_UP_EXPENSE_ENDPOINT)
@@ -54,6 +63,7 @@ class ExpenseController(
                         HttpStatus.BAD_REQUEST)
                 )
             }
+            .switchIfEmpty(Mono.just(SplitterResponseUtils.success(serverHttpRequest, null, "Expense not found", HttpStatus.OK)))
     }
 
     @DeleteMapping(Endpoints.DELETE_EXPENSE_ENDPOINT)

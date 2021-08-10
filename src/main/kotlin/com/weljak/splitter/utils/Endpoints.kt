@@ -12,6 +12,7 @@ object Endpoints {
     const val RECEIVED_FRIEND_REQUESTS_ENDPOINT = "$FRIENDS_REQUEST_ENDPOINT/received"
     const val CREATE_FRIENDS_REQUEST_ENDPOINT = "$FRIENDS_REQUEST_ENDPOINT/create"
     const val CONFIRM_FRIENDS_REQUEST_ENDPOINT = "$FRIENDS_REQUEST_ENDPOINT/confirm/{reqId}/{confirmationId}"
+    const val CANCEL_FRIENDS_REQUEST_ENDPOINT = "$FRIENDS_REQUEST_ENDPOINT/cancel/{reqId}"
 
     private const val EXPENSE_ENDPOINT = "/expense"
     const val CREATE_EXPENSE_ENDPOINT = "$EXPENSE_ENDPOINT/create"

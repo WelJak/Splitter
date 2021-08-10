@@ -34,12 +34,15 @@ class ExpenseValidator(private val userRepository: MongoUserDocumentRepository) 
 
     private fun validateExpenseUsers(expense: Expense): Mono<Expense> {
         return Flux.fromIterable(expense.expenseBreakdown.keys)
-            .flatMap { key -> userRepository.existsByUsername(key) }
+            .map { key -> userRepository.existsByUsername(key).map { Pair(key, it) } }
+            .flatMap { it }
             .collectList()
-            .doOnNext { if (it.contains(false)) {
-                throw UserDoesNotExistsException("User in given expense does not exist")
-            } }
-            .map { expense }
+            .map {
+                it.forEach { pair -> if (pair.second == false){
+                    throw UserDoesNotExistsException("User ${pair.first} in given expense does not exist")
+                } }
+            }.thenReturn(expense)
+            .map { it }
     }
 
     private fun validateExpenseSums(expense: Expense): Mono<Boolean> {

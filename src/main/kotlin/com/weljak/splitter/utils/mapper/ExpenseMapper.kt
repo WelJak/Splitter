@@ -21,6 +21,7 @@ interface ExpenseMapper {
         fun toExpense(expenseCreationForm: ExpenseCreationForm, creator: String): Expense {
             return Expense(
                 UUID.randomUUID().toString(),
+                expenseCreationForm.description,
                 creator,
                 expenseCreationForm.paidBy,
                 expenseCreationForm.amountPaidByPayer,

@@ -43,7 +43,7 @@ object SplitterResponseUtils {
     fun noContent(serverHttpRequest: ServerHttpRequest, message: String): ResponseEntity<SplitterResponse> {
         val endpoint = serverHttpRequest.path.pathWithinApplication().value()
         val response = successsplitterResponse(endpoint, null, message, HttpStatus.NO_CONTENT)
-        return ResponseEntity(response, HttpStatus.NO_CONTENT)
+        return ResponseEntity(response, HttpStatus.OK)
     }
 
     private fun successsplitterResponse(endpoint: String, payload: Any?, message: String, httpsStatus: HttpStatus): SplitterResponse {

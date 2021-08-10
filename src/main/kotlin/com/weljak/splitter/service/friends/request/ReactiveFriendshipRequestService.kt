@@ -42,9 +42,9 @@ class ReactiveFriendshipRequestService(
             .findById(requestId)
             .filter { it.potentialFriend.username == currentUser }
             .filter { it.confirmationId == confirmationId }
-            .doOnNext { friendshipRequestRepository.deleteFriendshipRequest(it).thenReturn(it) }
+            .flatMap { friendshipRequestRepository.deleteFriendshipRequest(it).thenReturn(it) }
             .zipWhen {friendshipService.findByUsername(it.username)}
-            .doOnNext { friendshipService.addFriend(it.t2, it.t1.potentialFriend).thenReturn(it) }
+            .flatMap { friendshipService.addFriend(it.t2, it.t1.potentialFriend).thenReturn(it) }
             .zipWhen({userService.getByUsername(it.t1.username)}, {friendshipReq, newFriend -> Pair(friendshipReq.t1, newFriend)})
             .zipWhen({friendshipService.findByUsername(it.first.potentialFriend.username)}, {newFriend, newFriendship -> Pair(newFriend.second, newFriendship)})
             .flatMap { friendshipService.addFriend(it.second, Friend(it.first.username, it.first.email)) }

@@ -22,4 +22,15 @@ object Endpoints {
     const val FIND_EXPENSES_BY_GROUP_NAME_ENDPOINT = "$EXPENSE_ENDPOINT/{groupName}"
     const val GET_CURRENT_USER_UNSETTLED_EXPENSES = "$FIND_EXPENSES_ENDPOINT/unsettled"
 
+    private const val GROUP_ENDPOINT = "/group"
+    const val CREATE_GROUP_ENDPOINT = "$GROUP_ENDPOINT/create"
+    const val DELETE_GROUP_ENDPOINT = "$GROUP_ENDPOINT/delete/{id}"
+    const val FIND_GROUP_BY_ID_ENDPOINT = "$GROUP_ENDPOINT/{id}"
+    const val GET_CURRENT_USER_GROUPS_ENDPOINT = "$GROUP_ENDPOINT/all"
+    const val FIND_GROUPS_BY_NAME_ENDPOINT = "$GET_CURRENT_USER_GROUPS_ENDPOINT/{name}"
+    private const val GROUP_MEMBERS_ENDPOINT = "$GROUP_ENDPOINT/members"
+    const val ADD_MEMBERS_TO_GROUP_ENDPOINT = "/add/{id}"
+    const val DELETE_MEMBERS_FROM_GROUP_ENDPOINT = "/delete/{id}"
+
+
 }

@@ -2,6 +2,7 @@ package com.weljak.splitter.utils.api.response
 
 import com.fasterxml.jackson.core.JsonParseException
 import com.fasterxml.jackson.databind.JsonMappingException
+import com.weljak.splitter.service.group.UserNotOwnerOfGroupException
 import com.weljak.splitter.service.user.UserAlreadyExistsException
 import mu.KotlinLogging
 import org.springframework.http.HttpStatus
@@ -26,5 +27,12 @@ class ControllerAdvice {
         val message = exception.message
         log.warn("User already exists: $message")
         return SplitterResponseUtils.error(serverHttpRequest, null, message.toString(), HttpStatus.BAD_REQUEST)
+    }
+
+    @ExceptionHandler(UserNotOwnerOfGroupException::class)
+    fun userNotOwnerOfGroup(serverHttpRequest: ServerHttpRequest, exception: Exception): ResponseEntity<SplitterResponse> {
+       val message = exception.message
+       log.warn(message)
+       return SplitterResponseUtils.error(serverHttpRequest, null, message.toString(), HttpStatus.FORBIDDEN)
     }
 }

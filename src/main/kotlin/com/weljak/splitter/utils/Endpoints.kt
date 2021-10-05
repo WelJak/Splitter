@@ -29,8 +29,7 @@ object Endpoints {
     const val GET_CURRENT_USER_GROUPS_ENDPOINT = "$GROUP_ENDPOINT/all"
     const val FIND_GROUPS_BY_NAME_ENDPOINT = "$GET_CURRENT_USER_GROUPS_ENDPOINT/{name}"
     private const val GROUP_MEMBERS_ENDPOINT = "$GROUP_ENDPOINT/members"
-    const val ADD_MEMBERS_TO_GROUP_ENDPOINT = "/add/{id}"
-    const val DELETE_MEMBERS_FROM_GROUP_ENDPOINT = "/delete/{id}"
-
-
+    const val ADD_USERS_TO_GROUP_ENDPOINT = "$GROUP_MEMBERS_ENDPOINT/add/{id}"
+    const val REMOVE_MEMBERS_FROM_GROUP_ENDPOINT = "$GROUP_MEMBERS_ENDPOINT/delete/{id}"
+    const val LEAVE_GROUP_ENDPOINT = "$FIND_GROUP_BY_ID_ENDPOINT/leave"
 }

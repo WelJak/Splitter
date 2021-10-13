@@ -4,21 +4,18 @@ import com.weljak.splitter.service.group.GroupService
 import com.weljak.splitter.utils.Endpoints
 import com.weljak.splitter.utils.api.response.SplitterResponse
 import com.weljak.splitter.utils.api.response.SplitterResponseUtils
+import com.weljak.splitter.utils.mapper.GroupMapper
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.http.server.reactive.ServerHttpRequest
 import org.springframework.security.core.annotation.AuthenticationPrincipal
-import org.springframework.web.bind.annotation.DeleteMapping
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 import reactor.core.publisher.Mono
 
 @RestController
 class GroupController(
-    private val groupService: GroupService
+    private val groupService: GroupService,
+    private val groupMapper: GroupMapper
 ) {
     @PostMapping(Endpoints.CREATE_GROUP_ENDPOINT)
     fun createGroup(
@@ -79,14 +76,15 @@ class GroupController(
             .map { SplitterResponseUtils.success(serverHttpRequest, it, "Groups details fetched", HttpStatus.OK) }
     }
 
-    @PostMapping(Endpoints.ADD_USERS_TO_GROUP_ENDPOINT)
+    @PutMapping(Endpoints.ADD_USERS_TO_GROUP_ENDPOINT)
     fun addUsersToGroup(
         serverHttpRequest: ServerHttpRequest,
         @AuthenticationPrincipal currentUser: String,
         @PathVariable id: String,
         @RequestBody toAdd: ManageGroupMembershipRequest
     ): Mono<ResponseEntity<SplitterResponse>> {
-        return groupService.addMembers(id, toAdd.usernames, currentUser)
+        return groupService.findById(id)
+            .flatMap { groupService.addMembers(groupMapper.toGroupDocument(it), toAdd.usernames, currentUser) }
             .map { SplitterResponseUtils.success(serverHttpRequest, it, "Users added to group", HttpStatus.OK) }
     }
 
@@ -97,17 +95,19 @@ class GroupController(
         @PathVariable id: String,
         @RequestBody toDelete: ManageGroupMembershipRequest
     ): Mono<ResponseEntity<SplitterResponse>> {
-        return groupService.removeMembers(id, toDelete.usernames, currentUser)
+        return groupService.findById(id)
+            .flatMap { groupService.removeMembers(groupMapper.toGroupDocument(it), toDelete.usernames, currentUser) }
             .map { SplitterResponseUtils.noContent(serverHttpRequest, "Users removed from group") }
-//            .onErrorResume {
-//                Mono.just(
-//                    SplitterResponseUtils.error(
-//                        serverHttpRequest,
-//                        null,
-//                        "Error occurred during removing users from group: ${it.message}",
-//                        HttpStatus.BAD_REQUEST
-//                    )
-//                )
-//            }
+    }
+
+    @GetMapping(Endpoints.LEAVE_GROUP_ENDPOINT)
+    fun leaveGroup(
+        serverHttpRequest: ServerHttpRequest,
+        @AuthenticationPrincipal currentUser: String,
+        @PathVariable id: String
+    ): Mono<ResponseEntity<SplitterResponse>> {
+        return groupService.findById(id)
+            .flatMap { groupService.leaveGroup(currentUser, groupMapper.toGroupDocument(it)) }
+            .map { SplitterResponseUtils.noContent(serverHttpRequest, "Group has been left") }
     }
 }

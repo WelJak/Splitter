@@ -3,12 +3,12 @@ package com.weljak.splitter.security
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
-import javax.annotation.PostConstruct
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Component
 import java.nio.charset.Charset
 import java.security.Key
 import java.util.*
+import javax.annotation.PostConstruct
 
 @Component
 class JwtUtils {
@@ -16,7 +16,7 @@ class JwtUtils {
     private lateinit var secret: String
 
     @Value("\${springbootwebfluxjjwt.jjwt.expiration}")
-    private var expirationTime: Int = 0
+    private var expirationTime: Long = 0
 
     private lateinit var key: Key
 

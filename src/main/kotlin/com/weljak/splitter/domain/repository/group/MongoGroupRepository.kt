@@ -1,9 +1,9 @@
 package com.weljak.splitter.domain.repository.group
 
-import com.weljak.splitter.webapi.controller.group.CreateGroupForm
 import com.weljak.splitter.domain.model.group.Group
 import com.weljak.splitter.domain.model.group.GroupDocument
 import com.weljak.splitter.utils.mapper.GroupMapper
+import com.weljak.splitter.webapi.controller.group.CreateGroupForm
 import mu.KotlinLogging
 import org.springframework.data.mongodb.core.ReactiveMongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria.where
@@ -11,15 +11,14 @@ import org.springframework.data.mongodb.core.query.Query.query
 import org.springframework.data.mongodb.core.query.Update
 import org.springframework.stereotype.Repository
 import reactor.core.publisher.Mono
-import reactor.kotlin.core.publisher.toMono
 
 @Repository
 class MongoGroupRepository(
     private val mongoGroupDocumentRepository: MongoGroupDocumentRepository,
     private val groupMapper: GroupMapper,
     private val mongoTemplate: ReactiveMongoTemplate
-    ): GroupRepository {
-    val log = KotlinLogging.logger {  }
+) : GroupRepository {
+    private val log = KotlinLogging.logger { }
     override fun createGroup(createGroupForm: CreateGroupForm, createdBy: String): Mono<Group> {
         val groupDocument = groupMapper.toGroupDocument(createGroupForm, createdBy)
         return mongoGroupDocumentRepository.save(groupDocument).map { groupMapper.toGroup(it) }
@@ -40,32 +39,48 @@ class MongoGroupRepository(
 
     }
 
-    override fun addMembers(groupId: String, toAdd: List<String>): Mono<Group> {
-        return mongoGroupDocumentRepository.findById(groupId)
-            .map { it.copy(members = it.members?.plus(toAdd)) }
-            .map { updateGroupDocumentMembers(it) }
-            .flatMap { it }
+    override fun addMembers(groupDocument: GroupDocument, toAdd: List<String>): Mono<Group> {
+        log.info("Adding new members")
+        val update = Update()
+        val updatedGroupMembers = groupDocument.members!!.plus(toAdd)
+        update.set("members", updatedGroupMembers)
+        return updateGroupDocumentMembers(groupDocument, update)
+            .flatMap { mongoGroupDocumentRepository.findById(groupDocument.id) }
             .map { groupMapper.toGroup(it) }
     }
 
-    override fun removeMembers(groupId: String, toDelete: List<String>): Mono<Group> {
-        return mongoGroupDocumentRepository.findById(groupId)
-                .map { it.copy(members = it.members?.minus(toDelete)) }
-                .flatMap { updateGroupDocumentMembers(it) }
-                .map { groupMapper.toGroup(it) }
+    override fun removeMembers(groupDocument: GroupDocument, toDelete: List<String>): Mono<Group> {
+        log.info("Removing members")
+        val update = Update()
+        val updatedGroupMembers = groupDocument.members?.minus(toDelete.toSet())
+        update.set("members", updatedGroupMembers)
+        return updateGroupDocumentMembers(groupDocument, update)
+            .flatMap { mongoGroupDocumentRepository.findById(groupDocument.id) }
+            .map { groupMapper.toGroup(it) }
+
     }
 
     override fun getCurrentUserGroups(currentUser: String): Mono<List<Group>> {
-        return mongoTemplate.find(query(where("members").and(currentUser)), GroupDocument::class.java, "group")
+        return mongoTemplate.find(
+            query(where("members").and(currentUser)),
+            GroupDocument::class.java,
+            GROUP_COLLECTION_NAME
+        )
             .map { groupMapper.toGroup(it) }
             .collectList()
     }
 
-    private fun updateGroupDocumentMembers(groupDocument: GroupDocument): Mono<GroupDocument> {
-        log.info("update")
-        val update = Update()
-        update.set("members", groupDocument.members)
-        return mongoTemplate.updateFirst(query(where("id").`is`(groupDocument.id)), update, GroupDocument::class.java, "group")
+    private fun updateGroupDocumentMembers(groupDocument: GroupDocument, update: Update): Mono<GroupDocument> {
+        return mongoTemplate.updateFirst(
+            query(where("id").`is`(groupDocument.id)),
+            update,
+            GroupDocument::class.java,
+            GROUP_COLLECTION_NAME
+        )
             .flatMap { mongoGroupDocumentRepository.findById(groupDocument.id) }
+    }
+
+    companion object {
+        private const val GROUP_COLLECTION_NAME = "group"
     }
 }

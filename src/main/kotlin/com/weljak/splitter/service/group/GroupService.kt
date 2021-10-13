@@ -1,7 +1,8 @@
 package com.weljak.splitter.service.group
 
-import com.weljak.splitter.webapi.controller.group.CreateGroupForm
 import com.weljak.splitter.domain.model.group.Group
+import com.weljak.splitter.domain.model.group.GroupDocument
+import com.weljak.splitter.webapi.controller.group.CreateGroupForm
 import reactor.core.publisher.Mono
 
 interface GroupService {
@@ -9,8 +10,8 @@ interface GroupService {
     fun deleteById(id: String, currentUser: String): Mono<Void>
     fun findById(id: String): Mono<Group>
     fun findByGroupName(groupName: String): Mono<List<Group>>
-    fun addMembers(groupId: String, toAdd: List<String>, currentUser: String): Mono<Group>
-    fun removeMembers(groupId: String, toDelete: List<String>, currentUser: String): Mono<Group>
+    fun addMembers(groupDocument: GroupDocument, toAdd: List<String>, currentUser: String): Mono<Group>
+    fun removeMembers(groupDocument: GroupDocument, toDelete: List<String>, currentUser: String): Mono<Group>
     fun getCurrentUserGroups(currentUser: String): Mono<List<Group>>
-    fun leaveGroup(currentUser: String, groupId: String): Mono<Void>
+    fun leaveGroup(currentUser: String, groupDocument: GroupDocument): Mono<Void>
 }

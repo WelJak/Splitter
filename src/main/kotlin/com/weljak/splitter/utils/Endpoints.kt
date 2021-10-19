@@ -32,4 +32,8 @@ object Endpoints {
     const val ADD_USERS_TO_GROUP_ENDPOINT = "$GROUP_MEMBERS_ENDPOINT/add/{id}"
     const val REMOVE_MEMBERS_FROM_GROUP_ENDPOINT = "$GROUP_MEMBERS_ENDPOINT/delete/{id}"
     const val LEAVE_GROUP_ENDPOINT = "$FIND_GROUP_BY_ID_ENDPOINT/leave"
+
+    const val OPENAPI_3_DOCUMENTATION_ENDPOINT = "/v3/api-docs/**"
+    const val OPENAPI_3_UI_ENDPOINT = "/swagger-ui.html"
+    const val WEBJARS_ENDPOINT = "/webjars/**"
 }

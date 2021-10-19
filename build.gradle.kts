@@ -31,6 +31,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
 
+    implementation("org.springdoc:springdoc-openapi-webflux-ui:1.5.11")
+
     implementation("org.mapstruct:mapstruct:1.4.2.Final")
     kapt("org.mapstruct:mapstruct-processor:1.4.2.Final")
 

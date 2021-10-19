@@ -32,6 +32,9 @@ class WebSecurityConfig(
             .authorizeExchange()
             .pathMatchers(Endpoints.USER_LOGIN_ENDPOINT).permitAll()
             .pathMatchers(Endpoints.USER_REGISTER_ENDPOINT).permitAll()
+            .pathMatchers(Endpoints.OPENAPI_3_DOCUMENTATION_ENDPOINT).permitAll()
+            .pathMatchers(Endpoints.OPENAPI_3_UI_ENDPOINT).permitAll()
+            .pathMatchers(Endpoints.WEBJARS_ENDPOINT).permitAll()
             .anyExchange().authenticated()
             .and().build()
     }

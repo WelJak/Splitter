@@ -62,7 +62,7 @@ class MongoGroupRepository(
 
     override fun getCurrentUserGroups(currentUser: String): Mono<List<Group>> {
         return mongoTemplate.find(
-            query(where("members").and(currentUser)),
+            query(where("members").`is`(currentUser)),
             GroupDocument::class.java,
             GROUP_COLLECTION_NAME
         )

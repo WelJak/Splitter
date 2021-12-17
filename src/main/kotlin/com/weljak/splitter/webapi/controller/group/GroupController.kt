@@ -107,7 +107,6 @@ class GroupController(
         @PathVariable id: String
     ): Mono<ResponseEntity<SplitterResponse>> {
         return groupService.findById(id)
-            .flatMap { groupService.leaveGroup(currentUser, groupMapper.toGroupDocument(it)) }
-            .map { SplitterResponseUtils.noContent(serverHttpRequest, "Group has been left") }
+            .flatMap { groupService.leaveGroup(currentUser, groupMapper.toGroupDocument(it)) }.thenReturn(SplitterResponseUtils.noContent(serverHttpRequest, "Group has been left"))
     }
 }
